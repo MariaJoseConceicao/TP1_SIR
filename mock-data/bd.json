@@ -1,0 +1,57 @@
+{
+  "alunos": [
+    {
+      "nome": "Maria",
+      "apelido": "Conceição",
+      "idCurso": 1,
+      "anoCurricular": 3,
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "nome": "João",
+      "apelido": "Silva",
+      "idCurso": 2,
+      "anoCurricular": 1
+    },
+    {
+      "id": "hKxUxhV9IDo",
+      "nome": "Ana",
+      "apelido": "Conceição",
+      "idCurso": 1,
+      "anoCurricular": 3
+    },
+    {
+      "id": "kL5-Hol2mfs",
+      "nome": "Marta",
+      "apelido": "Sousa",
+      "idCurso": 1,
+      "anoCurricular": 3
+    },
+    {
+      "nome": "Patricio",
+      "apelido": "Martins",
+      "idCurso": 1,
+      "anoCurricular": 3,
+      "id": "Pwo4X-xy4Ew"
+    },
+    {
+      "id": "9QR-wON8G-4",
+      "nome": "Patricia",
+      "apelido": "Matos",
+      "idCurso": 1,
+      "anoCurricular": 3
+    }
+  ],
+  "cursos": [
+    {
+      "id": "1",
+      "nomeDoCurso": "Engenharia Informática"
+    },
+    {
+      "id": "2",
+      "nomeDoCurso": "Gestão"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
