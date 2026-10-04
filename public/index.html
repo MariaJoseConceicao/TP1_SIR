@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Alunos</title>
+
+    
+</head>
+
+<body>
+
+    <h1>Alunos</h1>
+
+    <h2>Criar / Editar Aluno</h2>
+
+    <div id="criar">
+        <form id="formCriar">
+            <input type="text" id="nome" placeholder="Nome do aluno" required>
+            <input type="text" id="apelido" placeholder="Apelido do aluno" required>
+
+            <select id="idCurso" required>
+                <option value="">Seleciona um curso</option>
+            </select>
+
+            <input type="number" id="anoCurricular" placeholder="Ano curricular" min="1" required>
+
+            <button type="button" id="btcriar">Criar Aluno</button>
+            <button type="button" id="btCancelarEdicao" style="display:none;">Cancelar edição</button>
+        </form>
+    </div>
+
+    <h2>Lista de Alunos</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Apelido</th>
+                <th>Curso</th>
+                <th>Ano Curricular</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="alunos"></tbody>
+    </table>
+
+    <script>
+        let alunoEmEdicao = null;
+
+        async function getAlunos() {
+            const response = await fetch('http://localhost:3000/alunos');
+            return response.json();
+        }
+
+        async function getCursos() {
+            const response = await fetch('http://localhost:3000/cursos');
+            return response.json();
+        }
+
+        async function carregarCursos() {
+            const cursos = await getCursos();
+            const selectCurso = document.getElementById('idCurso');
+
+            selectCurso.innerHTML = '';
+
+            const opcaoInicial = document.createElement('option');
+            opcaoInicial.value = '';
+            opcaoInicial.textContent = 'Seleciona um curso';
+            selectCurso.appendChild(opcaoInicial);
+
+            cursos.forEach(curso => {
+                const option = document.createElement('option');
+                option.value = curso.id;
+                option.textContent = curso.nomeDoCurso;
+                selectCurso.appendChild(option);
+            });
+        }
+
+        async function addAluno() {
+            const aluno = {
+                nome: document.getElementById('nome').value,
+                apelido: document.getElementById('apelido').value,
+                idCurso: Number(document.getElementById('idCurso').value),
+                anoCurricular: Number(document.getElementById('anoCurricular').value)
+            };
+
+            await fetch('http://localhost:3000/alunos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(aluno)
+            });
+
+            document.getElementById('formCriar').reset();
+            mostraAlunos();
+        }
+
+        async function updateAluno(id) {
+            const aluno = {
+                nome: document.getElementById('nome').value,
+                apelido: document.getElementById('apelido').value,
+                idCurso: Number(document.getElementById('idCurso').value),
+                anoCurricular: Number(document.getElementById('anoCurricular').value)
+            };
+
+            await fetch(`http://localhost:3000/alunos/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(aluno)
+            });
+
+            alunoEmEdicao = null;
+            document.getElementById('formCriar').reset();
+            document.getElementById('btcriar').textContent = 'Criar Aluno';
+            document.getElementById('btCancelarEdicao').style.display = 'none';
+
+            mostraAlunos();
+        }
+
+        async function deleteAluno(id) {
+            await fetch(`http://localhost:3000/alunos/${id}`, {
+                method: 'DELETE'
+            });
+            mostraAlunos();
+        }
+
+        function editarAluno(aluno) {
+            alunoEmEdicao = aluno.id;
+
+            document.getElementById('nome').value = aluno.nome;
+            document.getElementById('apelido').value = aluno.apelido;
+            document.getElementById('idCurso').value = aluno.idCurso;
+            document.getElementById('anoCurricular').value = aluno.anoCurricular;
+
+            document.getElementById('btcriar').textContent = 'Atualizar Aluno';
+            document.getElementById('btCancelarEdicao').style.display = 'inline';
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function cancelarEdicao() {
+            alunoEmEdicao = null;
+            document.getElementById('formCriar').reset();
+            document.getElementById('btcriar').textContent = 'Criar Aluno';
+            document.getElementById('btCancelarEdicao').style.display = 'none';
+        }
+
+        async function mostraAlunos() {
+            const alunos = await getAlunos();
+            const cursos = await getCursos();
+
+            const divAlunos = document.getElementById('alunos');
+            divAlunos.innerHTML = '';
+
+            alunos.forEach(aluno => {
+                const trAluno = document.createElement('tr');
+
+                const tdNome = document.createElement('td');
+                tdNome.textContent = aluno.nome;
+
+                const tdApelido = document.createElement('td');
+                tdApelido.textContent = aluno.apelido;
+
+                const tdCurso = document.createElement('td');
+                const curso = cursos.find(c => String(c.id) === String(aluno.idCurso));
+                tdCurso.textContent = curso ? curso.nomeDoCurso : 'Curso desconhecido';
+
+                const tdAno = document.createElement('td');
+                tdAno.textContent = aluno.anoCurricular;
+
+                const tdAcoes = document.createElement('td');
+
+                const btnEditar = document.createElement('button');
+                btnEditar.textContent = 'Editar';
+                btnEditar.addEventListener('click', () => editarAluno(aluno));
+
+                const btnDelete = document.createElement('button');
+                btnDelete.textContent = 'Apagar';
+                btnDelete.addEventListener('click', () => deleteAluno(aluno.id));
+
+                tdAcoes.appendChild(btnEditar);
+                tdAcoes.appendChild(btnDelete);
+
+                trAluno.appendChild(tdNome);
+                trAluno.appendChild(tdApelido);
+                trAluno.appendChild(tdCurso);
+                trAluno.appendChild(tdAno);
+                trAluno.appendChild(tdAcoes);
+
+                divAlunos.appendChild(trAluno);
+            });
+        }
+
+        document.getElementById('btcriar').addEventListener('click', () => {
+            if (alunoEmEdicao === null) {
+                addAluno();
+            } else {
+                updateAluno(alunoEmEdicao);
+            }
+        });
+
+        document.getElementById('btCancelarEdicao').addEventListener('click', cancelarEdicao);
+
+        carregarCursos();
+        mostraAlunos();
+    </script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
       "nome": "Maria",
       "apelido": "Conceição",
       "idCurso": 1,
-      "anoCurricular": 3,
+      "anoCurricular": 2,
       "id": "1"
     },
     {
@@ -15,32 +15,39 @@
       "anoCurricular": 1
     },
     {
-      "id": "hKxUxhV9IDo",
+      "id": "3",
       "nome": "Ana",
       "apelido": "Conceição",
       "idCurso": 1,
       "anoCurricular": 3
     },
     {
-      "id": "kL5-Hol2mfs",
+      "id": "4",
       "nome": "Marta",
       "apelido": "Sousa",
       "idCurso": 1,
       "anoCurricular": 3
     },
     {
+      "id": "5",
       "nome": "Patricio",
       "apelido": "Martins",
       "idCurso": 1,
-      "anoCurricular": 3,
-      "id": "Pwo4X-xy4Ew"
+      "anoCurricular": 3
     },
     {
-      "id": "9QR-wON8G-4",
+      "id": "6",
       "nome": "Patricia",
       "apelido": "Matos",
       "idCurso": 1,
       "anoCurricular": 3
+    },
+    {
+      "nome": "Diogo",
+      "apelido": "Cunha",
+      "idCurso": 2,
+      "anoCurricular": 1,
+      "id": "gINFUUB39nA"
     }
   ],
   "cursos": [
